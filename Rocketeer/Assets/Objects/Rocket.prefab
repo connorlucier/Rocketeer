@@ -399,6 +399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0932f1000bdaefb46bd27d8aaa252c89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transitionTime: 1
   rcsThrust: 300
   mainThrust: 300
 --- !u!135 &135250094161735742

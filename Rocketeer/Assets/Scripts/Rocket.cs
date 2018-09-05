@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Rocket : MonoBehaviour {
+
+    [SerializeField]
+    float transitionTime;
 
     [SerializeField]
     float rcsThrust;
@@ -13,33 +14,49 @@ public class Rocket : MonoBehaviour {
 
     Rigidbody rigidBody;
 
+    bool alive;
+
 	// Use this for initialization
 	void Start () {
         rigidBody = GetComponent<Rigidbody>();
-
-        if (rcsThrust <= 0)
-        {
-            rcsThrust = 150.0f;
-        }
-
-        if (mainThrust <= 0)
-        {
-            mainThrust = 250.0f;
-        }
+        alive = true;
     }
 	
 	// Update is called once per frame
 	void Update () {
-        ThrustShip();
-        RotateShip();
+        if (alive)
+        {
+            ThrustShip();
+            RotateShip();
+        }
 	}
 
     void OnCollisionEnter(Collision col)
     {
-        if(col.gameObject.tag != "Friendly")
+        if (!alive) return;
+
+        switch (col.gameObject.tag)
         {
-            print("Dead");
+            case "Finish":
+                Invoke("LoadNextLevel", transitionTime);
+                break;
+            case "Friendly":
+                break;
+            default:
+                alive = false;
+                Invoke("LoadFirstLevel", transitionTime);
+                break;
         }
+    }
+
+    private void LoadFirstLevel()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    private void LoadNextLevel()
+    {
+        SceneManager.LoadScene(1);
     }
 
     private void ThrustShip()
