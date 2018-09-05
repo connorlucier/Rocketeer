@@ -5,31 +5,41 @@ using UnityEngine;
 
 public class Rocket : MonoBehaviour {
 
+    Rigidbody rigidBody;
+
 	// Use this for initialization
 	void Start () {
-		
+        rigidBody = GetComponent<Rigidbody>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        ProcessInput();
+        ThrustShip();
+        RotateShip();
 	}
 
-    private void ProcessInput()
+    private void ThrustShip()
     {
         if (Input.GetKey(KeyCode.Space))
         {
-            GetComponent<Rigidbody>().transform.Translate(0, 0.2f, 0);
+            rigidBody.AddRelativeForce(Vector3.up * 20);
         }
+    }
+
+    private void RotateShip()
+    {
+        rigidBody.freezeRotation = true;
 
         if (Input.GetKey(KeyCode.A))
         {
-            GetComponent<Rigidbody>().transform.Rotate(0, 0, 1.5f);
+            transform.Rotate(Vector3.forward / (Time.deltaTime * 40));
         }
 
         if (Input.GetKey(KeyCode.D))
         {
-            GetComponent<Rigidbody>().transform.Rotate(0, 0, -1.5f);
+            transform.Rotate(Vector3.back / (Time.deltaTime * 40));
         }
+
+        rigidBody.freezeRotation = false;
     }
 }
