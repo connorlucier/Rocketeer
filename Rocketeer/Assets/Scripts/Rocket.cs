@@ -14,17 +14,17 @@ public class Rocket : MonoBehaviour {
 
     Rigidbody rigidBody;
 
-    bool alive;
+    bool controlsEnabled;
 
 	// Use this for initialization
 	void Start () {
         rigidBody = GetComponent<Rigidbody>();
-        alive = true;
+        controlsEnabled = true;
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (alive)
+        if (controlsEnabled)
         {
             ThrustShip();
             RotateShip();
@@ -33,17 +33,18 @@ public class Rocket : MonoBehaviour {
 
     void OnCollisionEnter(Collision col)
     {
-        if (!alive) return;
+        if (!controlsEnabled) return;
 
         switch (col.gameObject.tag)
         {
             case "Finish":
+                controlsEnabled = false;
                 Invoke("LoadNextLevel", transitionTime);
                 break;
             case "Friendly":
                 break;
             default:
-                alive = false;
+                controlsEnabled = false;
                 Invoke("LoadFirstLevel", transitionTime);
                 break;
         }
